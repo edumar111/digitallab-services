@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    mongo:
+        image: edumar111/everis-mongodb:v1.0
+        restart: always
+        ports:
+            - 27017:27017
+            - 28017:28017
+        environment:
+            - AUTH=no
+            - MONGODB_DATABASE="expertise"
+        volumes:
+            - /home/edumar111/data/datamongo:/data/db
+    ipfs:
+        image: ipfs/go-ipfs:latest
+        restart: always
+        ports:
+            - 8080:8080
+            - 4001:4001
+            - 5001:5001
+        volumes:
+            - /home/edumar111/data/ipfs/data:/data/ipfs
+            - /home/edumar111/data/ipfs/export:/export
+  

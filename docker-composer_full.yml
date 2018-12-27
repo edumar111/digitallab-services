@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+    mongo:
+        image: edumar111/everis-mongodb:v1.0
+        restart: always
+        ports:
+            - 27017:27017
+            - 28017:28017
+        environment:
+            - AUTH=no
+            - MONGODB_DATABASE="expertise"
+        volumes:
+            - /home/edumar111/data/datamongo:/data/db
+    ipfs:
+        image: ipfs/go-ipfs:latest
+        restart: always
+        ports:
+            - 8080:8080
+            - 4001:4001
+            - 5001:5001
+        volumes:
+            - /home/edumar111/data/ipfs/data:/data/ipfs
+            - /home/edumar111/data/ipfs/export:/export
+    expertise:
+        depends_on:
+            - mongo
+            - ipfs
+        image: edumar111/expertiseapi:v1.3.1
+        links:
+            - mongo
+        ports:
+            - 9876:9876
+        environment:
+            - MONGODB_URI="mongodb://mongo:27017/expertise"
+            - ADMIN_KEY="xXyY12n4tar"
+            - ETHEREUM_NODE_URL="http://35.231.124.87:8545"
+            - EXPERTISE_ADDRESS="0xad52c5e11867d3edf506905cf08e57dc3d2a4477"
+        restart: always
+
+  
